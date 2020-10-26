@@ -1,28 +1,45 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <keep-alive exclude="Home,detail">
+      <router-view></router-view>
+    </keep-alive>
+
+    <main-tab-Bar v-show="isShow"></main-tab-Bar>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import MainTabBar from "../src/components/content/mainTabbar/MainTabBar";
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      isShow: true,
+      rush: false
+    };
+  },
   components: {
-    HelloWorld
+    MainTabBar
+  },
+  watch: {
+    $route: {
+      handler: function(value, oldVal) {
+        let reg = /^\/(home|category|cart|profile)$/;
+        this.isShow = reg.test(value.path);
+      },
+      // 深度观察监听
+      deep: true
+    }
+    // $route(to, from) {
+    //   if (!this.rush) {
+    //     this.$router.go(0);
+    //     this.rush = true;
+    //   }
+    // }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import "assets/css/base.css";
 </style>
