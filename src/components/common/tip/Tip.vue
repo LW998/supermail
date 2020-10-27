@@ -1,7 +1,7 @@
 <template>
   <transition name="tip">
     <div class="tip" v-show="isShow">
-      <p class="content">{{message}}</p>
+      <p class="content">{{ message }}</p>
     </div>
   </transition>
 </template>
@@ -26,12 +26,30 @@ export default {
   //   }
   // },
   methods: {
-    show(message, duration = 1000) {
-      this.isShow = true;
-      this.message = message;
-      setTimeout(() => {
-        this.isShow = false;
-      }, duration);
+    show(message, type, duration = 1000) {
+      let context = this;
+      return (function anonymous() {
+        context.isShow = true;
+        context.message = message;
+        switch (type) {
+          case "info":
+            context.color = "#5cb3cc";
+            break;
+          case "error":
+            context.color = "#c21f30";
+            break;
+          case "success":
+            context.color = "#45b787";
+            break;
+          case "waring":
+            context.color = "#f0932b";
+        }
+        if (context.timer) clearTimeout(context.timer);
+        context.timer = setTimeout(() => {
+          context.isShow = false;
+          context.timer = null;
+        }, duration);
+      })();
     }
   }
 };
